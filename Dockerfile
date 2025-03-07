@@ -1,13 +1,10 @@
-FROM python:3.9-alpine
+FROM python:3.9-slim
 
-# Installer ffmpeg et dépendances système nécessaires
-RUN apk add --no-cache \
-    ffmpeg \
-    bash \
-    gcc \
-    musl-dev \
-    python3-dev \
-    libffi-dev
+# Installer ffmpeg et dépendances
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Créer dossiers de travail
 WORKDIR /app
@@ -27,4 +24,4 @@ RUN chmod +x process_video.sh
 EXPOSE 8080
 
 # Démarrer l'application avec gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--timeout", "300", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--timeout", "600", "--workers", "1", "app:app"]
