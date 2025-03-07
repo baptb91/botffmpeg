@@ -26,5 +26,5 @@ RUN chmod +x process_video.sh
 # Exposer le port
 EXPOSE 8080
 
-# Démarrer l'application
-CMD ["python", "app.py"]
+# Démarrer l'application avec gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--timeout", "300", "app:app"]
