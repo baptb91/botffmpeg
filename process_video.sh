@@ -39,7 +39,7 @@ ffmpeg -i "$MAIN_VIDEO" -i "$MOCKUP_VIDEO" -filter_complex \
 "[0:v]scale=iw*0.8:ih*0.8[scaled]; \
  [1:v]trim=0:$DURATION[trimmed]; \
  [trimmed][scaled]overlay=(W-w)/2:(H-h)/2:shortest=1" \
--c:v libx264 -preset faster -crf 23 \
+-c:v libx264 -preset ultrafast -crf 28 \
 -c:a aac -b:a 128k \
 "$OUTPUT_VIDEO" 2>&1
 
