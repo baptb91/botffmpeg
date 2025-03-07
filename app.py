@@ -5,7 +5,10 @@ import logging
 from flask import Flask, request, jsonify, send_file
 
 # Configuration du logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -63,8 +66,13 @@ def process_video():
             
             logger.info(f"Exécution de la commande: {' '.join(command)}")
             
-            # Augmenter le timeout à 300 secondes (5 minutes)
-            process = subprocess.run(command, capture_output=True, text=True, timeout=300)
+            # Augmenter le timeout à 600 secondes (10 minutes)
+            process = subprocess.run(
+                command, 
+                capture_output=True, 
+                text=True, 
+                timeout=600
+            )
             
             if process.returncode != 0:
                 logger.error(f"Erreur ffmpeg: {process.stderr}")
