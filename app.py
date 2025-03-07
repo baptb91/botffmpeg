@@ -5,6 +5,9 @@ from flask import Flask, request, jsonify, send_file
 
 app = Flask(__name__)
 
+# Augmenter la taille maximale des fichiers (500 MB)
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024
+
 UPLOAD_FOLDER = '/app/uploads'
 OUTPUT_FOLDER = '/app/output'
 
@@ -38,7 +41,8 @@ def process_video():
             output_path
         ]
         
-        process = subprocess.run(command, capture_output=True, text=True)
+        # Augmenter le timeout à 300 secondes (5 minutes)
+        process = subprocess.run(command, capture_output=True, text=True, timeout=300)
         
         if process.returncode != 0:
             return jsonify({
@@ -56,6 +60,8 @@ def process_video():
             'message': 'Vidéo traitée avec succès'
         })
         
+    except subprocess.TimeoutExpired:
+        return jsonify({'error': 'Le traitement de la vidéo a pris trop de temps'}), 504
     except Exception as e:
         return jsonify({'error': f'Erreur lors du traitement: {str(e)}'}), 500
 
@@ -67,4 +73,4 @@ if __name__ == '__main__':
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
     port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, timeout=300)
