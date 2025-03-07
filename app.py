@@ -73,4 +73,4 @@ if __name__ == '__main__':
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
     port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port, timeout=300)
+    app.run(host='0.0.0.0', port=port)
