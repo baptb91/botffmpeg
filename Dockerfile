@@ -1,10 +1,13 @@
-FROM python:3.9-slim
+FROM python:3.9-alpine
 
-# Installer ffmpeg et dépendances
-RUN apt-get update && \
-    apt-get install -y ffmpeg && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Installer ffmpeg et dépendances système nécessaires
+RUN apk add --no-cache \
+    ffmpeg \
+    bash \
+    gcc \
+    musl-dev \
+    python3-dev \
+    libffi-dev
 
 # Créer dossiers de travail
 WORKDIR /app
